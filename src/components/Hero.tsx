@@ -1,0 +1,141 @@
+
+import React, { useEffect, useRef } from 'react';
+import GlitchText from './ui/GlitchText';
+
+const Hero: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Create matrix effect
+    const fontSize = 12;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops: number[] = Array(columns).fill(1);
+    
+    const matrix = () => {
+      ctx.fillStyle = 'rgba(15, 15, 15, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.font = `${fontSize}px Roboto Mono`;
+      
+      for (let i = 0; i < drops.length; i++) {
+        // Random characters
+        const text = String.fromCharCode(Math.random() * 128);
+        
+        // Random colors for matrix rain
+        const color = Math.random() > 0.8 
+          ? '#00BFFF' // Blue
+          : Math.random() > 0.5 
+            ? '#9B59B6' // Purple
+            : '#00FF00'; // Green
+        
+        ctx.fillStyle = color;
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        
+        drops[i]++;
+      }
+    };
+    
+    const animation = setInterval(matrix, 50);
+    
+    return () => {
+      clearInterval(animation);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+  
+  return (
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-20"></canvas>
+      
+      <div className="scanline"></div>
+      
+      <div className="container max-w-7xl mx-auto px-6 z-10 py-20">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="order-2 md:order-1">
+            <div className="space-y-6">
+              <div className="space-y-2 animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+                <p className="text-cyber-green font-mono inline-flex items-center">
+                  <span className="h-2 w-2 bg-cyber-green animate-pulse rounded-full mr-2"></span>
+                  Digital Designer / Developer
+                </p>
+                <h1 className="text-4xl md:text-6xl font-orbitron font-bold leading-tight">
+                  <GlitchText text="Cyber" as="span" color="blue" className="block" />
+                  <span className="text-white">Design</span>
+                  <GlitchText text="Studio" as="span" color="green" className="block" />
+                </h1>
+              </div>
+              
+              <p className="text-lg md:text-xl text-gray-300 max-w-lg animate-fadeIn" style={{ animationDelay: '0.4s' }}>
+                Creating futuristic digital experiences for the next generation of brands and products.
+              </p>
+              
+              <div className="flex flex-wrap gap-4 animate-fadeIn" style={{ animationDelay: '0.6s' }}>
+                <a href="#projects" className="btn-cyber-blue animate-pulse-glow">
+                  View Projects
+                </a>
+                <a href="#contact" className="btn-cyber-purple animate-pulse-glow">
+                  Get In Touch
+                </a>
+              </div>
+              
+              <div className="neon-box neon-purple p-4 backdrop-blur-md max-w-md animate-fadeIn" style={{ animationDelay: '0.8s' }}>
+                <p className="font-mono text-sm text-gray-300">
+                  <span className="text-cyber-purple">$</span> Designing the future, one pixel at a time
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="order-1 md:order-2 animate-slideInRight" style={{ animationDelay: '0.2s' }}>
+            <div className="relative">
+              <div className="neon-box neon-blue h-72 md:h-96 w-full rounded-lg overflow-hidden">
+                {/* City silhouette */}
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-cyber-black to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="text-cyber-blue opacity-30">
+                    <path fill="currentColor" d="M0,224L40,229.3C80,235,160,245,240,245.3C320,245,400,235,480,192C560,149,640,75,720,69.3C800,64,880,128,960,165.3C1040,203,1120,213,1200,208C1280,203,1360,181,1400,170.7L1440,160L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+                  </svg>
+                </div>
+                
+                {/* Cyberpunk portrait placeholder */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 md:w-64 md:h-64">
+                  <div className="relative w-full h-full animate-float">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyber-blue to-cyber-purple opacity-40 blur-lg"></div>
+                    <div className="absolute inset-2 rounded-full bg-cyber-black flex items-center justify-center">
+                      <span className="font-orbitron text-7xl md:text-9xl text-cyber-blue">X</span>
+                    </div>
+                    <div className="absolute inset-0 border-2 rounded-full border-cyber-blue animate-pulse-glow"></div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Decorative elements */}
+              <div className="absolute -top-5 -right-5 h-20 w-20 border-t-2 border-r-2 border-cyber-purple"></div>
+              <div className="absolute -bottom-5 -left-5 h-20 w-20 border-b-2 border-l-2 border-cyber-green"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
